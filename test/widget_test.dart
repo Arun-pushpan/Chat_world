@@ -6,6 +6,7 @@
 // tree, read text, and verify that the values of widget properties are correct.
 
 import 'package:chat_with_friends/app.dart';
+import 'package:chat_with_friends/themes/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -13,8 +14,10 @@ import 'package:chat_with_friends/main.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+    ThemeProvider themeProvider = ThemeProvider();
+    await themeProvider.loadThemeModeFromPrefs();
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+    await tester.pumpWidget( MyApp(themeProvider: themeProvider,));
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);

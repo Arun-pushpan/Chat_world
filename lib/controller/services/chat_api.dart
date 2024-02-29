@@ -48,8 +48,9 @@ class ChatApi {
         .collection("messages")
         .add(newMessage.toMap());
   }
-    // get messages
-    Stream<QuerySnapshot> getMessages(String userID, String otherUserID) {
+
+  // get messages
+  Stream<QuerySnapshot> getMessages(String userID, String otherUserID) {
     List<String> ids = [userID, otherUserID];
     ids.sort();
     String chatRoomID = ids.join('_');
@@ -60,8 +61,5 @@ class ChatApi {
         .collection("messages")
         .orderBy("timestamp", descending: false)
         .snapshots();
-    }
-
-
-
+  }
 }
