@@ -7,7 +7,12 @@ class CustomListTile extends StatelessWidget {
   final Color? cColor;
   final Function() onTap;
 
-  const CustomListTile({super.key, required this.tText, required this.sIcon, required this.onTap, this.cColor});
+  const CustomListTile(
+      {super.key,
+      required this.tText,
+      required this.sIcon,
+      required this.onTap,
+      this.cColor});
 
   @override
   Widget build(BuildContext context) {
@@ -15,13 +20,10 @@ class CustomListTile extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: ListTile(
         tileColor: cColor,
-        shape:OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-          borderSide: BorderSide(
-            color: Theme.of(context).colorScheme.tertiary
-          )
-
-        ),
+        shape: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16),
+            borderSide:
+                BorderSide(color: Theme.of(context).colorScheme.tertiary)),
         onTap: onTap,
         title: Text(
           tText,

@@ -1,0 +1,1 @@
+const profileImage = "assest/image/ai_girl_or_real_photo__by_ameliaai_dfxswli-pre.jpg";
