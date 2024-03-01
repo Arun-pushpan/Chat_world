@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 ThemeData lightMode = ThemeData(
     scaffoldBackgroundColor: Colors.white,
     appBarTheme: AppBarTheme(
-      backgroundColor: Colors.grey.shade100,
+      backgroundColor: Colors.transparent,
       foregroundColor: Colors.grey.shade800,
       iconTheme: const IconThemeData(color: Colors.black),
       centerTitle: true,

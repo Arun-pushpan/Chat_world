@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:chat_with_friends/controller/auth/auth_services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -39,11 +40,12 @@ class Api {
             .then((value) => Navigator.push(
                 context, MaterialPageRoute(builder: (context) => HomePage())));
       } catch (e) {
-        showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-                  title: Text(e.toString()),
-                ));
+        print(e.toString());
+        // showDialog(
+        //     context: context,
+        //     builder: (context) => AlertDialog(
+        //           title: Text(e.toString()),
+        //         ));
       }
     } else {
       showDialog(
@@ -55,8 +57,12 @@ class Api {
   }
 
   // sign Out
-  logout() {
-    final _auth = AuthService();
+  logout()async {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    // Clear SharedPreferences data on logout
+    await prefs.clear();
+    await _auth.signOut();
     _auth.signOut();
   }
 

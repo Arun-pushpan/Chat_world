@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:chat_with_friends/controller/auth/auth_services.dart';
 import 'package:chat_with_friends/controller/services/chat_api.dart';
 import 'package:chat_with_friends/widget/chat_bubble.dart';
@@ -25,6 +27,7 @@ class _ChatPageState extends State<ChatPage> {
   final AuthService _authService = AuthService();
   FocusNode myFocusNode = FocusNode();
 
+
   @override
   void initState() {
     super.initState();
@@ -37,7 +40,9 @@ class _ChatPageState extends State<ChatPage> {
         );
       }
     });
+
   }
+
 
   final ScrollController _scrollController = ScrollController();
 
@@ -154,13 +159,25 @@ class _ChatPageState extends State<ChatPage> {
                       fontSize: 18,
                       fontWeight: FontWeight.w700),
                 ),
-                Text(
-                  'last seen today at 12:34 PM',
-                  style: TextStyle(
-                    fontSize: 8,
-                    color: Theme.of(context).colorScheme.inversePrimary,
-                  ),
-                ),
+                // Row(
+                //   children: [
+                //     Container(
+                //       width: 10,
+                //       height: 10,
+                //       decoration: BoxDecoration(
+                //         shape: BoxShape.circle,
+                //         color: isOnline?Colors.green:Colors.red
+                //       ),
+                //     ),
+                //     Text(
+                //       '$isOnline',
+                //       style: TextStyle(
+                //         fontSize: 8,
+                //         color: Theme.of(context).colorScheme.inversePrimary,
+                //       ),
+                //     ),
+                //   ],
+                // ),
               ],
             ),
           ],

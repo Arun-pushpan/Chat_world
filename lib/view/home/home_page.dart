@@ -89,12 +89,12 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "C H A T  W O R L D",
-          style: TextStyle(color: Theme.of(context).colorScheme.inversePrimary),
+          "Chat World",
+          style: TextStyle(color: Theme.of(context).colorScheme.inversePrimary,fontWeight: FontWeight.bold),
         ),
         foregroundColor: Colors.grey.shade700,
       ),
-      drawer: const MyDrawer(),
+      drawer:  MyDrawer(),
       body: _buildUserList(),
     );
   }

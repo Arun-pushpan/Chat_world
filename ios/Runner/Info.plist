@@ -6,7 +6,7 @@
     <key>NSCameraUsageDescription</key>
     <string>Your message explaining camera usage</string>
     <key>NSPhotoLibraryUsageDescription</key>
-    <string>Your message explaining photo library usage</string>
+    <string>Photo Library usage</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>

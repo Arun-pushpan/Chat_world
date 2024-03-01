@@ -26,13 +26,13 @@ class UserTile extends StatelessWidget {
         child: Container(
           height: 60,
           decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.secondary,
+              color: Theme.of(context).colorScheme.secondary.withOpacity(0.4),
               borderRadius: BorderRadius.circular(12)),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               const SizedBox(
-                width: 20,
+                width: 30,
               ),
                CircleAvatar(
                 radius: 20,
@@ -40,9 +40,9 @@ class UserTile extends StatelessWidget {
               ),
               // const Icon(Icons.person,size: 40,),
               const SizedBox(
-                width: 20,
+                width: 30,
               ),
-              Text(text)
+              Text(text,style:  TextStyle(color:Theme.of(context).colorScheme.inversePrimary,fontSize: 15,fontWeight: FontWeight.w700),)
             ],
           ),
         ),

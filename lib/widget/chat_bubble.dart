@@ -14,30 +14,36 @@ class ChatBubble extends StatelessWidget {
     bool isDarkMode =
         Provider.of<ThemeProvider>(context, listen: false).isDarkMode;
 
-    return Container(
-      decoration: BoxDecoration(
-        color: isCurrentUser
-            ? (isDarkMode
-                ? Colors.white.withOpacity(0.9)
-                : Colors.grey.withOpacity(0.8))
-            : (isDarkMode
-                ? Colors.grey.withOpacity(0.2)
-                : Colors.grey.withOpacity(0.2)),
-        borderRadius: const BorderRadius.only(
-          topRight: Radius.circular(10),
-          bottomLeft: Radius.circular(16),
-        ),
-      ),
-      padding: const EdgeInsets.all(16),
-      margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 25),
-      child: Text(
-        message,
-        style: TextStyle(
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Container(
+          decoration: BoxDecoration(
             color: isCurrentUser
-                ? (isDarkMode ? Colors.black.withOpacity(0.8) : Colors.black)
-                : (isDarkMode ? Colors.white.withOpacity(0.9) : Colors.black),
-            fontWeight: FontWeight.w400),
-      ),
+                ? (isDarkMode
+                    ? Colors.white.withOpacity(0.9)
+                    : Colors.grey.withOpacity(0.8))
+                : (isDarkMode
+                    ? Colors.grey.withOpacity(0.2)
+                    : Colors.grey.withOpacity(0.2)),
+            borderRadius: const BorderRadius.only(
+              topRight: Radius.circular(10),
+              bottomLeft: Radius.circular(16),
+            ),
+          ),
+          padding: const EdgeInsets.all(16),
+          margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 25),
+          child: Text(
+            message,
+            style: TextStyle(
+                color: isCurrentUser
+                    ? (isDarkMode ? Colors.black.withOpacity(0.8) : Colors.black)
+                    : (isDarkMode ? Colors.white.withOpacity(0.9) : Colors.black),
+                fontWeight: FontWeight.w400),
+          ),
+        ),
+        Icon(Icons.done_all_outlined,color: Colors.lightBlueAccent,size: 20,),
+      ],
     );
   }
 }

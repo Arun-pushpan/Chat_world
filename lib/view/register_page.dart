@@ -1,8 +1,12 @@
+import 'dart:typed_data';
+
 import 'package:chat_with_friends/view/home/home_page.dart';
 import 'dart:io';
 import 'package:chat_with_friends/view/login.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart'as firebase_storage;
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -26,17 +30,19 @@ class _RegisterPageState extends State<RegisterPage> {
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   bool obscureText = true;
   bool obscureText1 = true;
   bool isLoading = false;
+  Uint8List? _image;
 
-  late ImagePicker _imagePicker;
-  File? _pickedFile;
+
 
   @override
   void initState() {
     super.initState();
-    _imagePicker = ImagePicker();
+
   }
 
   String? _validateName(String? value) {
@@ -74,33 +80,13 @@ class _RegisterPageState extends State<RegisterPage> {
     return null;
   }
 
-  Future<String?> uploadImageToFirebaseStorage(File imageFile) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    try {
-      String uid = prefs.getString('uid') ?? '';
-      String fileName = 'user_images/$uid/${DateTime.now().millisecondsSinceEpoch}.png';
-
-      firebase_storage.Reference reference = firebase_storage.FirebaseStorage.instance.ref(fileName);
-
-      firebase_storage.UploadTask uploadTask = reference.putFile(imageFile);
-
-      firebase_storage.TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() => null);
-
-      return await taskSnapshot.ref.getDownloadURL();
-    } catch (e) {
-      print("Error uploading image: $e");
-      return null;
-    }
-  }
 
 
-   _submitForm() async {
+
+  _submitForm() async {
     if (_formKey.currentState!.validate()) {
-
-      if (_pickedFile != null) {
-        String? imageUrl = await uploadImageToFirebaseStorage(_pickedFile!);
-
-        if (imageUrl != null) {
+        if (_image!= null) {
+          // Continue with user registration
           Api().register(
             context,
             emailController.text,
@@ -108,29 +94,34 @@ class _RegisterPageState extends State<RegisterPage> {
             confirmPasswordController.text,
             nameController.text,
             phoneController.text,
-            _pickedFile,
+            _image,
           );
         } else {
           // Handle the case where image upload fails
         }
-      }
-    }
-  }
-  Future<void> pickImageFromGallery() async {
-    final ImagePicker _picker = ImagePicker();
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
 
-    if (image != null) {
-      // Do something with the picked image file
-      setState(() {
-        _pickedFile = File(image.path);
-      });
-      print('Image path: ${image.path}');
-    } else {
-      // User canceled the picker
-      print('Image picking canceled.');
     }
   }
+
+
+  void selectImage()async{
+    Uint8List img  =await pickImage(ImageSource.gallery);
+    setState(() {
+      _image = img;
+    });
+
+
+  }
+
+  pickImage(ImageSource source)async{
+    final ImagePicker _imagePicker = ImagePicker();
+    XFile? _file =await _imagePicker.pickImage(source: source);
+    if(_file != null){
+      return await _file.readAsBytes();
+    }
+    print("No Images Selected");
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -145,22 +136,35 @@ class _RegisterPageState extends State<RegisterPage> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                s2,
-                CircleAvatar(
-                  radius: 40,
-                  backgroundColor: Colors.grey,
-                  backgroundImage:_pickedFile != null
-                      ? FileImage(_pickedFile!)
-                      : null,
+                Center(
+                  child: Stack(
+                    children: [
+                      _image!=null?
+                      CircleAvatar(
+                        radius: 40,
+                        backgroundImage: MemoryImage(_image!),
+                      ):
+                      const CircleAvatar(
+                        radius: 40,
+                        backgroundColor: Colors.grey,
+                        backgroundImage: NetworkImage("https://i.pinimg.com/474x/69/63/3a/69633a986c2358c21d82ba1b550df5a4.jpg",),
 
-                  child: IconButton(
-                    onPressed: () {
-                        pickImageFromGallery();
-                    },
-                    icon: Icon(Icons.camera_alt,color: Colors.black,size: 35,),
-                    
+                      ),
+                      Positioned(
+                          bottom: -13,
+                        left: 40,
+                          child: IconButton(
+                            onPressed: () {
+                              selectImage();
+                            },
+                            icon: const Icon(Icons.add_a_photo),),
+
+                      )
+                    ],
                   ),
                 ),
+
+
 
                 s2,
                 Text(
@@ -220,11 +224,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       )),
                 ),
                 s2,
-                isLoading == true
-                    ? const CircularProgressIndicator(
-                        color: Colors.black,
-                      )
-                    : CustomElevatedButton(
+                CustomElevatedButton(
                         bText: "REGISTER",
                         onPress: () {
                           setState(() {
@@ -233,6 +233,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           _submitForm();
                         },
                         bColor: Theme.of(context).colorScheme.tertiary,
+                       isLoading: isLoading,
                       ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,

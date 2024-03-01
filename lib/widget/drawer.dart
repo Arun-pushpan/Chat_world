@@ -1,6 +1,7 @@
 import 'package:chat_with_friends/constants/images.dart';
 import 'package:chat_with_friends/controller/auth/auth_services.dart';
 import 'package:chat_with_friends/view/home/drawer/about.dart';
+import 'package:chat_with_friends/view/home/drawer/edit_profile.dart';
 import 'package:chat_with_friends/view/home/drawer/settings.dart';
 import 'package:chat_with_friends/widget/list_tile.dart';
 import 'package:flutter/cupertino.dart';
@@ -11,18 +12,19 @@ import '../controller/services/api.dart';
 import '../model/user_model.dart';
 
 class MyDrawer extends StatelessWidget {
-  // final String name;
-  // final String email;
-  const MyDrawer({
+
+   MyDrawer({
     super.key,
   });
-
+  String? name;
+  String? phone;
+  String? img;
 
 
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      backgroundColor: Theme.of(context).colorScheme.tertiary,
+      backgroundColor: Theme.of(context).colorScheme.tertiary.withOpacity(0.9),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -33,7 +35,7 @@ class MyDrawer extends StatelessWidget {
             child: DrawerHeader(
               decoration: BoxDecoration(
                 shape: BoxShape.rectangle,
-                color: Theme.of(context).colorScheme.primary,
+                color: Theme.of(context).colorScheme.primary.withOpacity(0.6),
                 borderRadius: BorderRadius.circular(10),
               ),
               curve: Curves.bounceIn,
@@ -49,52 +51,69 @@ class MyDrawer extends StatelessWidget {
                   }
 
                   final user = snapshot.data!.data() as Map<String, dynamic>;
+                  name = user['name'] ?? '';  // If 'name' is null, assign an empty string
+                  phone = user['phoneNo'] ?? '';  // If 'phoneNo' is null, assign an empty string
+                  img = user['imageLink'] ?? '';  // If 'imageLink' is null, assign an empty string
+
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      CircleAvatar(
+                      user['imageLink'] != null && user['imageLink'].toString().isNotEmpty
+                          ? CircleAvatar(
                         radius: 50,
-                        backgroundImage:  const AssetImage(profileImage),
+                        backgroundImage: NetworkImage(user['imageLink'].toString()),
+                      )
+                          : const CircleAvatar(
+                        radius: 50,
+                        backgroundImage: AssetImage(profileImage),
                       ),
                       s1,
-                      Text(user['name']),
+                      Text(user['name'] != null && user['name'].toString().isNotEmpty
+                          ? user['name']
+                          : ""),
                       s1,
-                      Text(user['email']),
+                      Text(user['email'] != null && user['email'].toString().isNotEmpty
+                          ? user['email']
+                          : ""),
                     ],
                   );
+
                 },
               ),
             ),
           ),
-          // Icon(
-          //   Icons.group,
-          //   color: Theme.of(context).colorScheme.primary,
-          //   size: 50,
-          // )),
+
           s4,
           CustomListTile(
-              tText: "H O M E",
+              tText: "Home",
               sIcon: Icons.home,
               onTap: () {
                 Navigator.pop(context);
               }),
           CustomListTile(
-              tText: "S E T T I N G S",
+              tText: "Edit Profile",
+              sIcon: Icons.edit,
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) =>  EditProfile(name:name!,phone:phone!,img:img!)));
+              }),
+          CustomListTile(
+              tText: "Settings",
               sIcon: Icons.settings,
               onTap: () {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => const Settings()));
               }),
           CustomListTile(
-              tText: "A B O U T",
-              sIcon: Icons.edit,
+              tText: "About",
+              sIcon: Icons.note_alt_outlined,
               onTap: () {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => const About()));
               }),
           const Spacer(),
           CustomListTile(
-              tText: "L O G O U T",
+              tText: "Logout",
               sIcon: Icons.logout,
               onTap: () {
                 Api().logout();
