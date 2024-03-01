@@ -19,6 +19,7 @@ class _LoginState extends State<Login> {
   TextEditingController passwordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool obscureText = true;
+  bool isLoading = false;
 
   String? _validateEmail(String? value) {
     if (value!.isEmpty) {
@@ -94,8 +95,11 @@ class _LoginState extends State<Login> {
               bText: "LOGIN",
               onPress: () {
                 _submitForm();
+                setState(() {
+                  isLoading=true;
+                });
               },
-              bColor: Theme.of(context).colorScheme.tertiary,
+              bColor: Theme.of(context).colorScheme.tertiary, isLoading: isLoading,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,

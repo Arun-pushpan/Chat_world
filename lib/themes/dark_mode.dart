@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 ThemeData darkMode = ThemeData(
     scaffoldBackgroundColor: Colors.grey.shade900,
     appBarTheme: AppBarTheme(
-      backgroundColor: Colors.grey.shade800,
+      backgroundColor: Colors.transparent,
       foregroundColor: Colors.grey.shade900,
       iconTheme: const IconThemeData(color: Colors.white),
       centerTitle: true,

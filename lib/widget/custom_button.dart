@@ -1,15 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'cuatom_circularProgressIndicator.dart';
+
 class CustomElevatedButton extends StatelessWidget {
   final String bText;
   final Function() onPress;
   final Color bColor;
+  final bool isLoading;
   const CustomElevatedButton({
     super.key,
     required this.bText,
     required this.onPress,
     required this.bColor,
+    required this.isLoading,
   });
 
   @override
@@ -27,7 +31,8 @@ class CustomElevatedButton extends StatelessWidget {
               backgroundColor: bColor,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8))),
-          child: Text(bText,
+          child: isLoading ? Dialogs.showProgressBar(Colors.white):
+          Text(bText,
               style: TextStyle(
                   fontSize: 14,
                   overflow: TextOverflow.ellipsis,
